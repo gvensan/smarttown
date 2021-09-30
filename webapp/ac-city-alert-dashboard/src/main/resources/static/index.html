@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>SmartTown: Alert Dashboard</title>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <style>
+    html, body, #map-canvas {
+      height: 100%;
+      margin: 0px;
+      padding: 0px
+    }
+  </style>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBfsyY3DEhf63XEl9OjX6R_QcE5lHdD7Z8&v=3.exp&libraries=visualization"></script>
+  <!--script type="text/javascript" src="solclient-debug.js"></script>
+  <script type="text/javascript" src="marker_with_label.js"></script-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+  <!--script src="paho-mqtt.js" type="text/javascript"></script-->
+  <script src="shared.js" type="text/javascript"></script>
+
+  <style>
+    #wrapper {
+      position: relative;
+    }
+    #over_map_tl {
+      position: absolute;
+      top: 55px;
+      left: 9px;
+      z-index: 99;
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 10px;
+      border: 1px solid #999;
+      font-family: 'sans-serif';
+      padding-left: 10px;
+    }
+    #over_map_tr {
+      position: absolute;
+      top: 9px;
+      right: 55px;
+      z-index: 99;
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 10px;
+      border: 1px solid #999;
+      font-family: 'sans-serif';
+      line-height: 30px;
+      padding-left: 10px;
+    }
+   #over_map_br {
+      position: absolute;
+      bottom: 22px;
+      right: 55px;
+      z-index: 99;
+      background-color: rgba(255, 255, 255, 0.95);
+      border: 1px solid #999;
+      line-height: 30px;
+    }
+
+
+    h1 {
+      font: 18pt Roboto, sans-serif;
+      color: #000000;
+      padding: 2px;
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+    h3 {
+      font: 12pt Roboto, sans-serif;
+      color: #000000;
+      padding: 2px;
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+    p,td {
+      font: 9pt Roboto, sans-serif;
+      color: #000000;
+      padding: 0px;
+      margin-top: 1px;
+      margin-bottom: 1px;
+    }
+
+  </style>
+  <script>
+    // This example adds a user-editable rectangle to the map.
+
+    var map;
+    var oldRequestObj = {};
+    var lastResults = "";
+    var zoomLevel;
+    var globalZindex = 100;
+
+    var alerts = {};  // keyed by driverID
+    var requests = {};  // keyed by passengerID
+  	var windowSecs1 = (windowSizeSecs * 17/30);
+  	var windowSecs2 = (windowSizeSecs * 25/30)
+  	var windowSecs3 = windowSizeSecs;
+
+/**/
+	 // make the fire icons fade out
+	 setInterval(function() {
+	   for (var key in alerts) {
+	     if (!alerts.hasOwnProperty(key)) continue;
+	     var alert = alerts[key];
+	     var delta = Date.now() - Date.parse(alert.payload.timeStamp)
+	     if (delta > windowSecs3) {
+	       // they have faded away!  Delete 'em!
+	       alert.marker.setMap(null);
+	       if (alert.infoWindow != null) {
+	         alert.infoWindow.close();
+	         console.log("FADING AWAY A INFO WINDOW");
+	       }
+	       delete alerts[key];
+	     } else if (delta > windowSecs1) {
+	       alert.marker.setOpacity(0.33);
+	     } else if (delta > windowSecs2) {
+	       alert.marker.setOpacity(0.66);
+	     }
+	   }
+	 }, 1000);
+/**/
+
+    var icon_fire = 
+    	[ 
+    		{ url: "gfx/lowfire.png", anchor: { x: 7, y: 62 }},
+    		{ url: "gfx/mediumfire.png", anchor: { x: 7, y: 62 }},
+    		{ url: "gfx/highfire.png", anchor: { x: 7, y: 62 }}
+		];
+
+    var infoWindows = [];
+
+    function initialize() {
+      var mapOptions = {
+        center: new google.maps.LatLng(40.75,-73.95),  // NYC
+        zoom: 11,
+        draggable: true,
+        mapTypeId: 'satellite',
+        mapTypeControlOptions: {
+          mapTypeIds: ['coordinate', 'roadmap'],
+          style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+        },
+        scaleControl: true,
+        drawable: true,
+        clickable: false,
+        clickableIcons: false,
+        mapTypeControlOptions: {
+          //mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
+        }
+
+      };
+      map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+      map.setMapTypeId('terrain');
+
+      zoomLevel = map.getZoom();
+      console.log("Zoom is " + zoomLevel);
+      google.maps.event.addListener(map, 'zoom_changed', function() {
+        console.log("Zoom changed!!  from " + zoomLevel + " to " + map.getZoom());
+        zoomLevel = map.getZoom();
+        for (key in alerts) {
+          if (!alerts.hasOwnProperty(key)) continue;
+          setAlertIcon(key);
+        }
+      });
+    }
+    /////////// END OF MAP INITIALIZE method ////////////////////////////////////////
+    google.maps.event.addDomListener(window, 'load', initialize);  // when page is loaded, call initialize()
+
+
+
+    var sizes = [];
+    sizes[11] = new google.maps.Size(16,16);
+    sizes[12] = new google.maps.Size(24,24);
+    sizes[13] = new google.maps.Size(32,32);
+    sizes[14] = new google.maps.Size(36,36);
+    sizes[15] = new google.maps.Size(40,40);
+    sizes[16] = new google.maps.Size(44,44);
+    sizes[17] = new google.maps.Size(48,48);
+    sizes[18] = new google.maps.Size(56,56);
+
+    function setAlertIcon(cityName) {
+      var alert = alerts[cityName];
+      var payload = alert.payload;
+      var fire_icon = payload.severity == 'High' ? icon_fire[2] : 
+      						(payload.severity == 'Medium' ? icon_fire[1] : icon_fire[0]);
+      alert.marker.setIcon(fire_icon);
+      if (zoomLevel < 11) {
+        alert.marker.getIcon().scaledSize = new google.maps.Size(16,16);
+        alert.marker.getIcon().anchor = { x: 8, y: 8 };
+        return;
+      } else if (zoomLevel > 18) {
+        alert.marker.getIcon().scaledSize = new google.maps.Size(64,64);
+        alert.marker.getIcon().anchor = { x: 32, y: 32 };
+        return;
+      }
+      // else... it's in 11..18
+      var anchorPoint = sizes[zoomLevel].width / 2;
+      alert.marker.getIcon().scaledSize = sizes[zoomLevel];
+      alert.marker.getIcon().anchor = { x: anchorPoint, y: anchorPoint };
+      //alert.marker.getIcon().scaledSize = new google.maps.Size(Math.pow(2,zoomLevel-10), Math.pow(2,zoomLevel-10));
+    }
+
+
+    // MQTT code //////////////////////////////////////////////////////
+  
+    var isConnected = false;
+    console.log("Connecting...");
+    //var uniqueID = "abcdefg";
+    var uid = ""+(Math.random() + 1).toString(36).substring(2,8);  // generate a "random" [0-9a-z] 6 char ID
+    var mqttClient = getClientConnection(uid,onMessageArrived,onConnectionLost,onConnect);
+
+    // called when the client connects
+    function onConnect() {
+      console.log("Connected!");
+      isConnected = true;
+      mqttClient.subscribe(topicName);
+    }
+
+    // called when the client loses its connection
+    function onConnectionLost(responseObject) {
+      isConnected = false;
+      if (responseObject.errorCode !== 0) {
+        console.log("Connection Lost! " + responseObject.errorMessage);
+      }
+    }
+
+    // called when a message arrives
+    function onMessageArrived(msg) {
+      try {
+		console.log('Received Message: ', msg);
+		parseTemperatureMessage(msg);
+	  } catch (e) {
+        console.log("Had an issue with received message: topic="+msg.destinationName+", payload="+msg.payload);
+        console.log(e);
+      }
+    }
+
+
+    ////////////////////// Callback functions //////////////////////////////////////////////////////////////////////////////
+
+    function buildAlertWindowContent(cityName) {
+      var contentString = '<div id="content">';
+      var alert = alerts[cityName];
+      var payload = alert.payload;
+      //console.log(payload);
+      //return;
+      var jdate = Date.parse(payload.timeStamp);
+      contentString = '<h2 id="firstHeading" class="firstHeading">City: '+payload.city+'</h2>' +
+          '<div id="bodyContent"><p>' +
+          '<b>Temperature:</b> ' + payload.temperature+ '&deg;' +
+          '<br/><b>LatLong:</b> ' + payload.lat.toFixed(4) + 'N,' + payload.long.toFixed(4) + 'W' +
+          '<br/><b>Severity:</b> ' + payload.severity +
+          '<br/><b>Sample size:</b> ' + payload.count + 
+          '<br/><b>Date:</b> ' + new Date(jdate).toDateString() +
+          '<br/><b>Time:</b> ' + new Date(jdate).toTimeString() + 
+          '</p>';
+      // if (img != null) {
+      //   contentString += '<p align="center"><img src="' + img + '"></p>';
+      // }
+      contentString += '</div></div>';
+      return contentString;
+    }
+
+    // received when the alert is moving
+    function parseTemperatureMessage(msg) {
+      //console.log("Received message on: "+msg.destinationName+"  ("+msg.payloadString.length+" bytes)");
+      // SmartTown/Operations/AggregateAlert/created/v1/%s/%s/%s
+      var levels = msg.destinationName.split('/');
+      var payload = JSON.parse(msg.payloadString);
+      if (levels[5] != 'enroute') {
+        //console.log(levels[5]);
+        //console.log(payload);
+      }
+      console.log(payload);
+      //console.log(Math.floor(payload.heading / 22.5));
+      var cityName = payload.city;
+      var alert;  // for later
+      // now, have we seen this guy before?
+      if (!(cityName in alerts)) {  // keyed by driverID
+        alerts[cityName] = {}; // create new hash
+        alert = alerts[cityName];
+        alert["marker"] = new google.maps.Marker({
+          zIndex: globalZindex++,
+          //label: { text: "asfasdfasdf" }
+        });
+        // if they click the icon, pop up a window
+        google.maps.event.addListener(alert.marker, 'click', function() {
+          alert.marker.setZIndex(globalZindex++);  // pop to top
+          //buildAlertWindowContent(cityName);
+          if (alert.infoWindow != null) {
+            alert.infoWindow.setZIndex(globalZindex++);
+            return;
+          }
+          // var infoWindowOptions = {
+          //   disableAutoPan: true,
+          // }
+          alert.infoWindow = new google.maps.InfoWindow({ disableAutoPan: true});
+          alert.infoWindow.setZIndex(globalZindex++);
+          alert.infoWindow.setContent(buildAlertWindowContent(cityName));
+          alert.infoWindow.alert = alert;
+          alert.infoWindow.open(map, alert.marker);
+          google.maps.event.addListener(alert["infoWindow"], 'closeclick', function() {
+            alert.infoWindow = null;
+          });
+          infoWindows.push(alert.infoWindow);
+          if (infoWindows.length > 5) {
+            var oldInfo = infoWindows.shift(1);
+            oldInfo.alert.infoWindow = null;
+            oldInfo.close();
+          }
+        });
+      }
+      // now we've inserted the new guy for sure
+      alert = alerts[cityName];
+      //lat = lat + alert["latOff"];
+      //lon += alert["lonOff"];
+      var lat = payload.lat;
+      var lon = payload.long;
+
+      alert["pos"] = new google.maps.LatLng(lat, lon);
+      alert.marker.setPosition(alert["pos"]);
+      alert.marker.setAnimation(google.maps.Animation.NONE);
+      
+
+      alert["payload"] = payload;
+
+      alert.marker.setOpacity(1);
+      setAlertIcon(cityName);
+      alert.marker.setMap(map);
+      if (alert.marker.getMap() == null) {  // this is needed to prevent flickering, rather than just setting the map explicitly
+        alert.marker.setMap(map);
+      }
+      alert["ts"] = Date.now();
+      if (alert.infoWindow != null) {
+        // update it
+        alert.infoWindow.setContent(buildAlertWindowContent(cityName));
+      }
+    }  // end parseRideUpdatedMessage
+
+
+//    google.maps.event.addDomListener(window, 'load', onLogin);
+  </script>
+</head>
+
+<body>
+
+  <div id="map-canvas"></div>
+  <!--div id="over_map_tl">
+    <h3>Filtering:</h3>
+    <table>
+      <tr>
+        <td>
+          Filter by City Name: <input id="cityName" onchange="updateSearch()" size="4"/><br/>
+          Filter by Severity: <input id="severity" onchange="updateSearch()" size="4"/>
+        </td>
+      </tr>
+    </table>
+  </div-->
+
+  <div id="over_map_tr">
+    <h1>SmartTown - Alert Dashboard</h1>
+  </div>
+
+</body>
+
+</html>

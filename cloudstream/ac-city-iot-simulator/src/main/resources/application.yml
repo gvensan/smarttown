@@ -1,0 +1,33 @@
+server.port: 8082
+application:
+  # e.g., New York City
+  city: New York City      
+  # e.g., 40.713050
+  latitude: 40.713050       
+  # e.g., -74.007230 
+  longitude: -74.007230      
+spring:
+  cloud:
+    function:
+      definition: publishTemperatureData
+    stream:
+      bindings:
+        publishTemperatureData-out-0:
+          destination: SmartTown/Operations/temperatureReading/created/v1/*/*/*
+      binders:
+        solace-binder:
+          type: solace
+          environment:
+            solace:
+              java:
+                # e.g., 'tcps://mrri685heajs1.messaging.solace.cloud:55443'
+                host: tcps://mrri685heajs7.messaging.solace.cloud:55443  
+                msgVpn: solace-eap
+                clientUsername: smarttown
+                clientPassword: smarttown
+logging:
+  level:
+    root: info
+    org:
+      springframework: info
+      

@@ -1,0 +1,162 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <script src="paho-mqtt-min.js" type="text/javascript"></script>
+  <script src="shared.js" type="text/javascript"></script>
+<title>Simple MQTT Location Sender</title>
+<style>
+  html,body {
+    //width: 350px;
+  }
+  h1 {
+    font: 36pt Arial;
+    margin: 10 0 0 0;
+    padding: 0;
+    color: #333;
+  }
+  h2 {
+    font: 24pt Arial;
+    margin: 10 0 0 0;
+    padding: 0;
+    color: #005dab;
+  }
+  div, p, form, input {
+    font: 20pt Arial;
+  }
+</style>
+</head>
+<body>
+<h1>Simple MQTT Geolocation publisher</h1>
+<p>
+A demonstration of sending real-time geographic location and video information over a Solace message bus.</p>
+<div id="user-section">
+<form id="form" action="javascript:start()">Please enter: 
+<input id="user-entry" type="text" name="user-name" placeholder="Name or Alias">
+<input type="submit" value="Start!">
+</form>
+</div>
+<hr>
+<p id="position"><b>Location:</b> <br/><b>Message Count:</b> </p>
+<hr>
+<p id="log">Status: </p>
+
+<script>
+  var position_text = document.getElementById("position");
+  var count = 0;
+
+  var user = "test";
+  var topic;
+  var clientName;
+  var lat, lon;
+  var started = false;
+
+function draw(topic, video, bc, w, h) {
+  if (!started) {
+    return;
+  }
+  var newLoc = "<b>Location:</b> " + Math.abs(lat).toFixed(6);
+  if (lat < 0) newLoc += "S";
+  else newLoc += "N";
+  newLoc += ", "+Math.abs(lon).toFixed(6);
+  if (lon < 0) newLoc += "W";
+  else newLoc += "E";
+  position_text.innerHTML = newLoc + "<br/><b>Message Count:</b> " + count;	
+//  send(topic,null,user);
+}
+
+var log = function(msg) {
+  document.getElementById('log').innerHTML = "Status: "+msg;
+};
+
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.watchPosition(showPosition,geoShowError);
+    } else { 
+      position_text.innerHTML = "Geolocation is not supported by this browser.";
+    }
+  }
+
+function showPosition(position) {
+  started = true;
+  clientName = mySession.getSessionProperties().clientName;
+  lat = position.coords.latitude;
+  var latStr;
+  if (lat < 10) latStr = "0" + Math.abs(lat).toFixed(6);
+  else latStr = Math.abs(lat).toFixed(6);
+  if (lat < 0) latStr = "-"+latStr;
+  lon = position.coords.longitude;
+  var lonStr;
+  if (lon < 10) lonStr = "00" + Math.abs(lon).toFixed(6);
+  else if (lon < 100) lonStr = "0" + Math.abs(lon).toFixed(6);
+  else lonStr = Math.abs(lon).toFixed(6);
+  if (lon < 0) lonStr = "-" + lonStr;
+  topic = "GEO/USER/"+latStr+"/"+lonStr+"/"+user+"/"+clientName;
+  //topic = "GEO/USER/"+lat+"/"+lon+"/"+user+"/"+clientName;
+}
+
+function geoShowError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            position_text.innerHTML = "User denied the request for Geolocation."
+            break;
+        case error.POSITION_UNAVAILABLE:
+            position_text.innerHTML = "Location information is unavailable."
+            break;
+        case error.TIMEOUT:
+            position_text.innerHTML = "The request to get user location timed out."
+            break;
+        case error.UNKNOWN_ERROR:
+            position_text.innerHTML = "An unknown geo location error occurred."
+            break;
+    }
+}
+
+
+    function writeConsole(msg) {
+      console.log(msg);
+    }
+
+    var isConnected = false;
+    writeConsole("Connecting...");
+    var uniqueID = "gps-pub-abcdefg";
+    var mqttClient = getClientConnection(uniqueID,onMessageArrived,onConnectionLost,onConnect);
+
+    // called when the client connects
+    function onConnect() {
+      writeConsole("Connected!");
+      isConnected = true;
+      getLocation();
+
+    }
+
+    // called when the client loses its connection
+    function onConnectionLost(responseObject) {
+      isConnected = false;
+      if (responseObject.errorCode !== 0) {
+        writeConsole("Connection Lost! " + responseObject.errorMessage);
+      }
+    }
+
+    // called when a message arrives
+    function onMessageArrived(msg) {
+      if (msg.destinationName.indexOf("gps/") == 0) {
+          parseGeoMessage(msg);
+      }
+    }
+
+function start() {
+console.log("here3");
+  user = document.getElementById('user-entry').value;
+  parent = document.getElementById('user-section');
+  parent.removeChild(document.getElementById("form"));
+  getClientConnection(user,onMessageArrived,onConnectionLost,onConnect);
+  
+  getLocation();
+//  interval = setInterval(function(){ draw(topic, video, backcontext, back.width, back.height); },250);
+}
+
+
+
+</script>
+</body>
+</html>
