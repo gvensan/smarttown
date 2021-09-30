@@ -1,7 +1,5 @@
 # Smart Town Workshop
-This workshop contains the materials used during the SpringOne 2021 Developer Workshop for Solace. 
-The instructions and more context are available in the [codelab](https://codelabs.solace.dev/codelabs/springone-2021-asyncapi-workshop/index.html?index=..%2F..index#0)
-
+This workshop contains the materials used used for codelab [Creating Event API Products using Spring Cloud Stream, Event Portal and AsyncAPI](https://codelabs.solace.dev/create-api-products-using-scs-and-ep)
 
 ## Contributing
 
