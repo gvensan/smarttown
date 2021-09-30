@@ -1,0 +1,30 @@
+server.port: 8084
+application:
+  # e.g., New York City
+  city: New York City      
+spring:
+  cloud:
+    function:
+      definition: aggregateTemperature
+    stream:
+      bindings:
+        aggregateTemperature-out-0:
+          destination: 'SmartTown/Operations/AggregateAlert/created/v1/*/*/*'
+        aggregateTemperature-in-0:
+          destination: 'SmartTown/Operations/OperationalAlert/created/v1/*/*'
+      binders:
+        solace-binder:
+          type: solace
+          environment:
+            solace:
+              java:
+                # e.g., 'tcps://mrri685heajs1.messaging.solace.cloud:55443'
+                host: tcps://mrri685heajs7.messaging.solace.cloud:55443  
+                msgVpn: solace-eap
+                clientUsername: smarttown
+                clientPassword: smarttown
+logging:
+  level:
+    root: info
+    org:
+      springframework: error
