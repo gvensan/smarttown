@@ -9,6 +9,7 @@ public class OperationalAlert {
 
 	public OperationalAlert () {
 	}
+
 	public OperationalAlert (
 		String severity, 
 		String alertType, 

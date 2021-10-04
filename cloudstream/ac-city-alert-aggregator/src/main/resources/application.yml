@@ -1,7 +1,4 @@
 server.port: 8084
-application:
-  # e.g., New York City
-  city: New York City      
 spring:
   cloud:
     function:

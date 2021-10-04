@@ -14,8 +14,7 @@ spring:
           environment:
             solace:
               java:
-                # e.g., 'tcps://mrri685heajs1.messaging.solace.cloud:55443'
-                host: tcps://mrri685heajs7.messaging.solace.cloud:55443  
+                host: 'tcps://mrri685heajs7.messaging.solace.cloud:55443'
                 msgVpn: solace-eap
                 clientUsername: smarttown
                 clientPassword: smarttown

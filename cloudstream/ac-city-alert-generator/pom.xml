@@ -4,7 +4,7 @@
 
     <groupId>com.eap</groupId>
     <artifactId>ac-city-alert-generator</artifactId>
-    <version>0.0.1</version>
+    <version>1</version>
     <packaging>jar</packaging>
     <name>ac-city-alert-generator</name>
     <description>Auto-generated Spring Cloud Stream AsyncAPI application</description>

@@ -9,6 +9,7 @@ public class TemperatureReading {
 
 	public TemperatureReading () {
 	}
+
 	public TemperatureReading (
 		java.math.BigDecimal mCpuLoad, 
 		String mCity, 
