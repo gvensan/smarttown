@@ -167,7 +167,7 @@ channels:
           type: "string"
 asyncapi: "2.0.0"
 info:
+  x-generated-time: "2021-09-30 13:15 UTC"
   description: ""
   title: "HVAC Controller"
-  x-view: "provider"
   version: "1"

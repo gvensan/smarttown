@@ -21,7 +21,7 @@
     password: 'smarttown',
   }
   
-  var topicName = 'SmartTown/Operations/AggregateAlert/created/v1/New York City/+/+';
+  var topicName = 'SmartTown/Operations/AggregateAlert/created/v1/+/+/+';
   var windowSizeSecs = 10000;
 /* */
 

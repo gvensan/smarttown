@@ -27,7 +27,7 @@ public class OperationalAlert {
 
 	private String severity;
 	private String alertType;
-	private String city;
+	public String city;
 	private java.math.BigDecimal temperature;
 	private java.math.BigDecimal lat;
 	@JsonProperty("long")
