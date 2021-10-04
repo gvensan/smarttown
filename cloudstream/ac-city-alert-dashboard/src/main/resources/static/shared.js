@@ -2,16 +2,6 @@
  This file is used to store the connection credentials, and to initiate an MQTT connection
 */
 
-/*
-  var deets = {
-    host: 'taxi.messaging.solace.cloud',
-    port: 8443,
-    ssl: true,
-    username: 'public-taxi',
-    password: 'iliketaxis'
-  }
-*/
-/* */
   // eclipse test server
   var deets = {
     host: 'mrri685heajs7.messaging.solace.cloud',
@@ -23,7 +13,6 @@
   
   var topicName = 'SmartTown/Operations/AggregateAlert/created/v1/+/+/+';
   var windowSizeSecs = 10000;
-/* */
 
   // this is for MQTT, it should return a connected or connecting valid Paho client
   function getClientConnection(uniqueID,onMessageArrived,onConnectionLost,onConnect) {

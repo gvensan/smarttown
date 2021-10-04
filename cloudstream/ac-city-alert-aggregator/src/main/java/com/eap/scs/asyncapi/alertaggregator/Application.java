@@ -31,14 +31,10 @@ public class Application {
 	@Bean
 	public Function<Flux<OperationalAlert>, Flux<Message<AggregateAlert>>> aggregateTemperature() {
 		return flux -> {
-//			Flux<Message<AggregateAlert>> alertFlux = flux.log().window(Duration.ofSeconds(WINDOW_DURATION_SEC))
-//					.flatMap(this::calculateAverage)
-//					.log();
-			//
 			Flux<Message<AggregateAlert>> alertFlux = flux.window(Duration.ofSeconds(WINDOW_DURATION_SEC))
 														.map(a -> a)
-								    					.flatMap(this::calculateAverage)
-														.log();
+								    					.flatMap(this::calculateAverage);
+//														.log();
 			return alertFlux;
 		};
 		
@@ -84,9 +80,9 @@ public class Application {
 														accumulator.getLat(),
 														accumulator.get_long());
 							
-							System.out.println("Ready for " + group.key() + " with message " + alert.toString());
+							System.out.println("Aggregate for city: " + group.key() + "\n" + alert.toString());
 							// Construct the topic name with alert type and priority as per the Topic hierarchy design
-							//		SmartTown/Operations/AggregateAlert/created/v1/{city}/AlertPriority}/{AlertType}
+							//		SmartTown/Operations/AggregateAlert/created/v1/{city}/{AlertPriority}/{AlertType}
 							String topic = String.format("SmartTown/Operations/AggregateAlert/created/v1/%s/%s/%s",
 															alert.getCity(), alert.getSeverity(), alert.getAlertType());
 									
@@ -96,156 +92,5 @@ public class Application {
 								.build();
 							return message;
 						}));
-//				.log();
-
 	}
 }
-	
-//	@Bean
-//	public Function<Flux<OperationalAlert>, Flux<Message<AggregateAlert>>> aggregateTemperature() {
-//
-//		return flux -> {
-//			
-//			Flux<Message<AggregateAlert>> alertFlux = null;
-//			flux
-//														.log()
-//														.window(Duration.ofSeconds(WINDOW_DURATION_SEC))
-////														.flatMap(this::calculateAverage)
-////														.reduce(new AggregateAlert(),
-////																	(a, update) -> {
-////																		AggregateAlert aa = new AggregateAlert(
-////																			a.getCount() + 1,
-////																			WINDOW_DURATION_SEC,
-////																			update.getSeverity(),
-////																			update.getAlertType(),
-////																			update.getCity(),
-////																			sdf.format(new Date()),
-////																			a.getTemperature().add(update.getTemperature()),
-////																			update.getLat(),
-////																			update.get_long());
-////																		return aa;
-////																})
-//														.subscribe(alert -> System.out.println(alert.toString()));
-////														.log();
-//			return alertFlux;
-//		};
-//	}
-//	
-//	private Mono<Message<AggregateAlert>> calculateAverage(Flux<OperationalAlert> flux) {
-////		flux
-////			.reduce(new AggregateAlert(),
-////					(a, update) -> {
-////						AggregateAlert aa = new AggregateAlert(
-////							a.getCount() + 1,
-////							WINDOW_DURATION_SEC,
-////							update.getSeverity(),
-////							update.getAlertType(),
-////							update.getCity(),
-////							sdf.format(new Date()),
-////							a.getTemperature().add(update.getTemperature()),
-////							update.getLat(),
-////							update.get_long());
-////						return aa;
-////				})
-////			.subscribe(alert -> System.out.println(alert.toString()));
-//
-//			AggregateAlert alert = new AggregateAlert(
-//										1,
-//										10,
-//										"High",
-//										"HighTemperature",
-//										"New York",
-//										sdf.format(new Date()),
-//										new BigDecimal(100),
-//										new BigDecimal(100),
-//										new BigDecimal(100));
-//	
-//			
-//			// Construct the topic name with alert type and priority as per the Topic hierarchy design
-//			//		SmartTown/Operations/AggregateAlert/created/v1/{city}/AlertPriority}/{AlertType}
-//			String topic = String.format("SmartTown/Operations/AggregateAlert/created/v1/%s/%s/%s",
-//											alert.getCity(), alert.getSeverity(), alert.getAlertType());
-//									
-//			Message<AggregateAlert> message = MessageBuilder
-//					.withPayload(alert)
-//					.setHeader(BinderHeaders.TARGET_DESTINATION, topic)
-//					.build();
-//			return Mono.just(message);
-//	}
-//}
-//
-//	
-////	@Bean
-////	public Function<Flux<OperationalAlert>, Flux<AggregateAlert>> aggregateTemperature() {
-////		return flux -> flux.log().window(Duration.ofSeconds(WINDOW_DURATION_SEC)).flatMap(this::calculateAverage).log();
-////	}
-////
-////	private Mono<AggregateAlert> calculateAverage(Flux<OperationalAlert> flux) {
-////		// Aggregate the events in those windows
-////		return flux
-////				.reduce(new AggregateAlert(0, 0, 0),
-////						(a, tempUpdate) -> {
-////							System.out.println("UPDATE:" + tempUpdate.toString());
-////							return new AggregateAlert(a.getRideCount() + (1 +(int)(Math.random() * 100)),
-////										a.getTotalMeter() + (1 +(int)(Math.random() * 100)),
-////										a.getTotalPassengers() + (1 +(int)(Math.random() * 100)));
-////						});
-////
-////				// Calculate the window average in RideAveragePayload objects
-//////				.map(accumulator -> {
-//////					if (accumulator.getRideCount() == 0) { 
-//////						// Window was empty, return empty RideAveragePayload
-//////						AggregateAlert alert = new AggregateAlert();
-//////						alert.setDurationSec(WINDOW_DURATION_SEC);
-//////						alert.setTemperature(accumulator.getTotalMeter().add(new BigDecimal(1000)));
-//////						alert.setCount(20);
-//////						alert.setTimeStamp(sdf.format(new Date()));
-//////						return alert;
-//////					} else { 
-//////						// Calculate averages based on window
-//////						AggregateAlert alert = new AggregateAlert();
-//////						alert.setDurationSec(WINDOW_DURATION_SEC);
-//////						alert.setTemperature(accumulator.getTotalMeter().add(new BigDecimal(3000)));
-//////						alert.setCount(20);
-//////						alert.setTimeStamp(sdf.format(new Date()));
-//////						return alert;
-//////					}
-//////				}).log();
-////	}
-////	
-////	static class AggregateAlert {
-////		public int getRideCount() {
-////			return rideCount;
-////		}
-////		public void setRideCount(int rideCount) {
-////			this.rideCount = rideCount;
-////		}
-////		public int getTotalMeter() {
-////			return totalMeter;
-////		}
-////		public void setTotalMeter(int totalMeter) {
-////			this.totalMeter = totalMeter;
-////		}
-////		public int getTotalPassengers() {
-////			return totalPassengers;
-////		}
-////		public void setTotalPassengers(int totalPassengers) {
-////			this.totalPassengers = totalPassengers;
-////		}
-////		@Override
-////		public String toString() {
-////			return "AggregateAlert [rideCount=" + rideCount + ", totalMeter=" + totalMeter + ", totalPassengers="
-////					+ totalPassengers + "]";
-////		}
-////		public AggregateAlert(int rideCount, int totalMeter, int totalPassengers) {
-////			super();
-////			this.rideCount = rideCount;
-////			this.totalMeter = totalMeter;
-////			this.totalPassengers = totalPassengers;
-////		}
-////		private int rideCount;
-////		private int totalMeter;
-////		private int totalPassengers;
-////	}
-////	
-////}
