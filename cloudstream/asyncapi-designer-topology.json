@@ -1,0 +1,276 @@
+{
+  "applicationDomains": [
+    {
+      "createdTime": 1634625169912,
+      "updatedTime": 1634625169912,
+      "createdBy": "my0qy42yr1k",
+      "changedBy": "my0qy42yr1k",
+      "id": "za0ocgdlhqk",
+      "name": "SmartTown - Analytics",
+      "topicDomain": "SmartTown/Analytics",
+      "description": "",
+      "enforceUniqueTopicNames": true,
+      "type": "applicationDomain"
+    },
+    {
+      "createdTime": 1634625169912,
+      "updatedTime": 1634625169912,
+      "createdBy": "my0qy42yr1k",
+      "changedBy": "my0qy42yr1k",
+      "id": "7s2cjqpg56f",
+      "name": "SmartTown - Operations",
+      "topicDomain": "SmartTown/Operations",
+      "description": "",
+      "enforceUniqueTopicNames": true,
+      "schemas": [
+        {
+          "createdTime": 1634625169921,
+          "updatedTime": 1634625169921,
+          "createdBy": "my0qy42yr1k",
+          "changedBy": "my0qy42yr1k",
+          "id": "cg4392n6fka",
+          "name": "OperationalAlert",
+          "shared": true,
+          "description": "",
+          "contentType": "JSON",
+          "content": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema\",\n  \"type\": \"object\",\n  \"title\": \"The root schema\",\n  \"description\": \"The root schema comprises the entire JSON document.\",\n  \"default\": {},\n  \"examples\": [\n    {\n      \"lat\": -71.518929,\n      \"long\": -71.518929,\n      \"city\": \"Hopkinton\",\n      \"alertType\": \"HighTemperature\",\n      \"severity\": \"Medium\",\n      \"temperature\": 99.3\n    }\n  ],\n  \"required\": [\n    \"lat\",\n    \"long\",\n    \"city\",\n    \"alertType\",\n    \"severity\",\n    \"temperature\"\n  ],\n  \"properties\": {\n    \"lat\": {\n      \"type\": \"number\",\n      \"title\": \"The lat schema\",\n      \"description\": \"An explanation about the purpose of this instance.\",\n      \"default\": 0,\n      \"examples\": [\n        -71.518929\n      ]\n    },\n    \"long\": {\n      \"type\": \"number\",\n      \"title\": \"The long schema\",\n      \"description\": \"An explanation about the purpose of this instance.\",\n      \"default\": 0,\n      \"examples\": [\n        -71.518929\n      ]\n    },\n    \"city\": {\n      \"type\": \"string\",\n      \"title\": \"The city schema\",\n      \"description\": \"An explanation about the purpose of this instance.\",\n      \"default\": \"\",\n      \"examples\": [\n        \"Hopkinton\"\n      ]\n    },\n    \"alertType\": {\n      \"type\": \"string\",\n      \"title\": \"The alertType schema\",\n      \"description\": \"An explanation about the purpose of this instance.\",\n      \"default\": \"\",\n      \"examples\": [\n        \"HighTemperature\"\n      ]\n    },\n    \"severity\": {\n      \"type\": \"string\",\n      \"title\": \"The severity schema\",\n      \"description\": \"An explanation about the purpose of this instance.\",\n      \"default\": \"\",\n      \"examples\": [\n        \"Medium\"\n      ]\n    },\n    \"temperature\": {\n      \"type\": \"number\",\n      \"title\": \"The temperature schema\",\n      \"description\": \"An explanation about the purpose of this instance.\",\n      \"default\": 0,\n      \"examples\": [\n        99.3\n      ]\n    }\n  },\n  \"additionalProperties\": true\n}\n",
+          "applicationDomainId": "7s2cjqpg56f",
+          "revisionNumber": 1,
+          "versions": [],
+          "type": "schema"
+        },
+        {
+          "createdTime": 1634625169921,
+          "updatedTime": 1634625169921,
+          "createdBy": "my0qy42yr1k",
+          "changedBy": "my0qy42yr1k",
+          "id": "34mk9epxao7",
+          "name": "TemperatureReading",
+          "shared": true,
+          "description": "",
+          "contentType": "JSON",
+          "content": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema\",\n  \"type\": \"object\",\n  \"title\": \"The root schema\",\n  \"description\": \"The root schema comprises the entire JSON document.\",\n  \"default\": {},\n  \"examples\": [\n    {\n      \"m_city\": \"San Francisco\",\n      \"m_cpu_temp\": 55.6875,\n      \"m_cpu_load\": 3.0550130208333335,\n      \"m_latitude\": 13.04302978515625,\n      \"m_longitude\": 80.27391815185547\n    }\n  ],\n  \"required\": [\n    \"m_city\",\n    \"m_cpu_temp\",\n    \"m_cpu_load\",\n    \"m_latitude\",\n    \"m_longitude\"\n  ],\n  \"properties\": {\n    \"m_city\": {\n      \"type\": \"string\",\n      \"title\": \"The m_city schema\",\n      \"description\": \"An explanation about the purpose of this instance.\",\n      \"default\": \"\",\n      \"examples\": [\n        \"San Francisco\"\n      ]\n    },\n    \"m_cpu_temp\": {\n      \"type\": \"number\",\n      \"title\": \"The m_cpu_temp schema\",\n      \"description\": \"An explanation about the purpose of this instance.\",\n      \"default\": 0,\n      \"examples\": [\n        55.6875\n      ]\n    },\n    \"m_cpu_load\": {\n      \"type\": \"number\",\n      \"title\": \"The m_cpu_load schema\",\n      \"description\": \"An explanation about the purpose of this instance.\",\n      \"default\": 0,\n      \"examples\": [\n        3.0550130208333335\n      ]\n    },\n    \"m_latitude\": {\n      \"type\": \"number\",\n      \"title\": \"The m_latitude schema\",\n      \"description\": \"An explanation about the purpose of this instance.\",\n      \"default\": 0,\n      \"examples\": [\n        13.04302978515625\n      ]\n    },\n    \"m_longitude\": {\n      \"type\": \"number\",\n      \"title\": \"The m_longitude schema\",\n      \"description\": \"An explanation about the purpose of this instance.\",\n      \"default\": 0,\n      \"examples\": [\n        80.27391815185547\n      ]\n    }\n  },\n  \"additionalProperties\": true\n}",
+          "applicationDomainId": "7s2cjqpg56f",
+          "revisionNumber": 1,
+          "versions": [],
+          "type": "schema"
+        }
+      ],
+      "events": [
+        {
+          "createdTime": 1634625169992,
+          "updatedTime": 1634625169992,
+          "createdBy": "my0qy42yr1k",
+          "changedBy": "my0qy42yr1k",
+          "id": "vzyy6uol3dd",
+          "name": "TemperatureReading",
+          "version": "0.0.1",
+          "shared": true,
+          "description": "",
+          "schemaId": "34mk9epxao7",
+          "schemaVersionId": null,
+          "keySchemaId": null,
+          "keySchemaVersionId": null,
+          "applicationDomainId": "7s2cjqpg56f",
+          "revisionNumber": 1,
+          "keyPrimitivePayloadType": null,
+          "valuePrimitivePayloadType": null,
+          "topicAddress": {
+            "id": "39ghxy9h9hc",
+            "virtualBrokerId": "j9hi2h8h3y4",
+            "topicAddressLevels": [
+              {
+                "id": "qcks4a0ts6u",
+                "consumable": false,
+                "name": "SmartTown",
+                "displayName": "SmartTown",
+                "description": "",
+                "children": [],
+                "topicNodeType": "literal",
+                "type": "topicNode"
+              },
+              {
+                "id": "1n0bkytgpzb",
+                "consumable": false,
+                "name": "Operations",
+                "displayName": "Operations",
+                "description": "",
+                "children": [],
+                "topicNodeType": "literal",
+                "type": "topicNode"
+              },
+              {
+                "id": "su5mbydj277",
+                "consumable": false,
+                "name": "temperatureReading",
+                "displayName": "temperatureReading",
+                "description": "",
+                "children": [],
+                "topicNodeType": "literal",
+                "type": "topicNode"
+              },
+              {
+                "id": "3u0v5ffswiv",
+                "consumable": false,
+                "name": "created",
+                "displayName": "created",
+                "description": "",
+                "children": [],
+                "topicNodeType": "literal",
+                "type": "topicNode"
+              },
+              {
+                "id": "x1ylca2z2lk",
+                "consumable": false,
+                "name": "v1",
+                "displayName": "v1",
+                "description": "",
+                "children": [],
+                "topicNodeType": "literal",
+                "type": "topicNode"
+              },
+              {
+                "id": "hx7ekv5urzg",
+                "consumable": false,
+                "name": "city",
+                "displayName": "city",
+                "topicNodeType": "variable",
+                "type": "topicNode"
+              },
+              {
+                "id": "f7874bzjvpk",
+                "consumable": false,
+                "name": "latitude",
+                "displayName": "latitude",
+                "topicNodeType": "variable",
+                "type": "topicNode"
+              },
+              {
+                "id": "x2i6dejso9t",
+                "consumable": true,
+                "name": "longitude",
+                "displayName": "longitude",
+                "topicNodeType": "variable",
+                "type": "topicNode"
+              }
+            ],
+            "type": "topicAddress"
+          },
+          "type": "event"
+        },
+        {
+          "createdTime": 1634625170027,
+          "updatedTime": 1634625170027,
+          "createdBy": "my0qy42yr1k",
+          "changedBy": "my0qy42yr1k",
+          "id": "dfs718mog8u",
+          "name": "OperationalAlert",
+          "version": "0.0.1",
+          "shared": true,
+          "description": "",
+          "schemaId": "cg4392n6fka",
+          "schemaVersionId": null,
+          "keySchemaId": null,
+          "keySchemaVersionId": null,
+          "applicationDomainId": "7s2cjqpg56f",
+          "revisionNumber": 1,
+          "keyPrimitivePayloadType": null,
+          "valuePrimitivePayloadType": null,
+          "topicAddress": {
+            "id": "xxa7dgfu4nu",
+            "virtualBrokerId": "j9hi2h8h3y4",
+            "topicAddressLevels": [
+              {
+                "id": "qcks4a0ts6u",
+                "consumable": false,
+                "name": "SmartTown",
+                "displayName": "SmartTown",
+                "description": "",
+                "children": [],
+                "topicNodeType": "literal",
+                "type": "topicNode"
+              },
+              {
+                "id": "1n0bkytgpzb",
+                "consumable": false,
+                "name": "Operations",
+                "displayName": "Operations",
+                "description": "",
+                "children": [],
+                "topicNodeType": "literal",
+                "type": "topicNode"
+              },
+              {
+                "id": "jfhrdvcjj4a",
+                "consumable": false,
+                "name": "OperationalAlert",
+                "displayName": "OperationalAlert",
+                "description": "",
+                "children": [],
+                "topicNodeType": "literal",
+                "type": "topicNode"
+              },
+              {
+                "id": "kbw0q4g88ga",
+                "consumable": false,
+                "name": "created",
+                "displayName": "created",
+                "description": "",
+                "children": [],
+                "topicNodeType": "literal",
+                "type": "topicNode"
+              },
+              {
+                "id": "3axwpxikm47",
+                "consumable": false,
+                "name": "v1",
+                "displayName": "v1",
+                "description": "",
+                "children": [],
+                "topicNodeType": "literal",
+                "type": "topicNode"
+              },
+              {
+                "id": "ggb8atebxfr",
+                "consumable": false,
+                "name": "AlertPriority",
+                "displayName": "AlertPriority",
+                "topicNodeType": "variable",
+                "type": "topicNode"
+              },
+              {
+                "id": "xkd0ksl6guj",
+                "consumable": true,
+                "name": "AlertType",
+                "displayName": "AlertType",
+                "topicNodeType": "variable",
+                "type": "topicNode"
+              }
+            ],
+            "type": "topicAddress"
+          },
+          "type": "event"
+        }
+      ],
+      "type": "applicationDomain"
+    }
+  ],
+  "virtualBrokers": [
+    {
+      "createdTime": 1634555703852,
+      "updatedTime": 1634555703852,
+      "createdBy": "my0qy42yr1k",
+      "changedBy": "my0qy42yr1k",
+      "id": "j9hi2h8h3y4",
+      "name": "LogicalEventMesh",
+      "description": "",
+      "brokerType": "solace",
+      "levelDelimiter": "/",
+      "topicNodes": [],
+      "type": "virtualBroker"
+    }
+  ],
+  "topicValueSets": [],
+  "formatVersion": "1",
+  "type": "ApplicationDomainExport"
+}
