@@ -14,10 +14,10 @@ spring:
           environment:
             solace:
               java:
-                host: 'tcps://mrri685heajs7.messaging.solace.cloud:55443'
+                host: tcps://mrm28q29kuoha.messaging.solace.cloud:55443  
                 msgVpn: solace-eap
-                clientUsername: smarttown
-                clientPassword: smarttown
+                clientUsername: solace-cloud-client
+                clientPassword: fv1e2ijrun4r7ol5irkk9i6s4g
 logging:
   level:
     root: info
