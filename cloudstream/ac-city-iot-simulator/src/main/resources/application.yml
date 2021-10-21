@@ -1,10 +1,7 @@
 server.port: 8082
 application:
-  # e.g., New York City
   city: New York City      
-  # e.g., 40.713050
   latitude: 40.713050       
-  # e.g., -74.007230 
   longitude: -74.007230      
 spring:
   cloud:
@@ -20,11 +17,10 @@ spring:
           environment:
             solace:
               java:
-                # e.g., 'tcps://mrri685heajs1.messaging.solace.cloud:55443'
-                host: tcps://mrri685heajs7.messaging.solace.cloud:55443  
+                host: tcps://mrm28q29kuoha.messaging.solace.cloud:55443  
                 msgVpn: solace-eap
-                clientUsername: smarttown
-                clientPassword: smarttown
+                clientUsername: solace-cloud-client
+                clientPassword: fv1e2ijrun4r7ol5irkk9i6s4g
 logging:
   level:
     root: info
