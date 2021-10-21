@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "The root schema",
+  "description": "The root schema comprises the entire JSON document.",
+  "default": {},
+  "examples": [
+    {
+      "lat": -71.518929,
+      "long": -71.518929,
+      "city": "Hopkinton",
+      "alertType": "HighTemperature",
+      "severity": "Medium",
+      "temperature": 99.3,
+      "count": 30,
+      "timeStamp": "2021-11-29'T'18:37:22.323333",
+      "duration": 30
+    }
+  ],
+  "required": [
+    "lat",
+    "long",
+    "city",
+    "alertType",
+    "severity",
+    "temperature",
+    "count",
+    "timeStamp",
+    "duration"
+  ],
+  "properties": {
+    "lat": {
+      "type": "number",
+      "title": "The lat schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0,
+      "examples": [
+        -71.518929
+      ]
+    },
+    "long": {
+      "type": "number",
+      "title": "The long schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0,
+      "examples": [
+        -71.518929
+      ]
+    },
+    "city": {
+      "type": "string",
+      "title": "The city schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "Hopkinton"
+      ]
+    },
+    "alertType": {
+      "type": "string",
+      "title": "The alertType schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "HighTemperature"
+      ]
+    },
+    "severity": {
+      "type": "string",
+      "title": "The severity schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "Medium"
+      ]
+    },
+    "temperature": {
+      "type": "number",
+      "title": "The temperature schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0,
+      "examples": [
+        99.3
+      ]
+    },
+    "count": {
+      "type": "number",
+      "title": "The count schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0,
+      "examples": [
+        30
+      ]
+    },
+    "timeStamp": {
+      "type": "string",
+      "title": "The timeStamp schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0,
+      "examples": [
+        "2021-11-29'T'18:37:22.323333"
+      ]
+    },
+    "duration": {
+      "type": "number",
+      "title": "The duration schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0,
+      "examples": [
+        30
+      ]
+    }
+  },
+  "additionalProperties": true
+}
+
