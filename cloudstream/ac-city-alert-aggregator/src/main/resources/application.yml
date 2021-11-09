@@ -6,7 +6,7 @@ spring:
     stream:
       bindings:
         aggregateTemperature-out-0:
-          destination: 'SmartTown/Operations/AggregateAlert/created/v1/*/*/*'
+          destination: 'SmartTown/Analytics/AggregateAlert/created/v1/*/*/*'
         aggregateTemperature-in-0:
           destination: 'SmartTown/Operations/OperationalAlert/created/v1/*/*'
       binders:

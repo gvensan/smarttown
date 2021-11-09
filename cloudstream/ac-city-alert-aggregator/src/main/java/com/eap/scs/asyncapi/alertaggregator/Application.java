@@ -82,8 +82,8 @@ public class Application {
 							
 							System.out.println("Aggregate for city: " + group.key() + "\n" + alert.toString());
 							// Construct the topic name with alert type and priority as per the Topic hierarchy design
-							//		SmartTown/Operations/AggregateAlert/created/v1/{city}/{AlertPriority}/{AlertType}
-							String topic = String.format("SmartTown/Operations/AggregateAlert/created/v1/%s/%s/%s",
+							//		SmartTown/Analytics/AggregateAlert/created/v1/{city}/{AlertPriority}/{AlertType}
+							String topic = String.format("SmartTown/Analytics/AggregateAlert/created/v1/%s/%s/%s",
 															alert.getCity(), alert.getSeverity(), alert.getAlertType());
 									
 							Message<AggregateAlert> message = MessageBuilder

@@ -11,7 +11,7 @@
     password: 'fv1e2ijrun4r7ol5irkk9i6s4g',
   }
   
-  var topicName = 'SmartTown/Operations/AggregateAlert/created/v1/+/+/+';
+  var topicName = 'SmartTown/Analytics/AggregateAlert/created/v1/+/+/+';
   var windowSizeSecs = 10000;
 
   // this is for MQTT, it should return a connected or connecting valid Paho client

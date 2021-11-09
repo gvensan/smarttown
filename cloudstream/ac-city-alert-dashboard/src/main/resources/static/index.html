@@ -262,7 +262,7 @@
     // received when the alert is moving
     function parseTemperatureMessage(msg) {
       //console.log("Received message on: "+msg.destinationName+"  ("+msg.payloadString.length+" bytes)");
-      // SmartTown/Operations/AggregateAlert/created/v1/%s/%s/%s
+      // SmartTown/Analytics/AggregateAlert/created/v1/%s/%s/%s
       var levels = msg.destinationName.split('/');
       var payload = JSON.parse(msg.payloadString);
       if (levels[5] != 'enroute') {
