@@ -1,6 +1,6 @@
 server.port: 8082
 application:
-  city: New York City      
+  city: NewYorkCity      
   latitude: 40.713050       
   longitude: -74.007230      
 spring:
@@ -17,10 +17,10 @@ spring:
           environment:
             solace:
               java:
-                host: tcps://mrm28q29kuoha.messaging.solace.cloud:55443  
+                host: <host>
                 msgVpn: solace-eap
                 clientUsername: solace-cloud-client
-                clientPassword: fv1e2ijrun4r7ol5irkk9i6s4g
+                clientPassword: password
 logging:
   level:
     root: info
