@@ -4,11 +4,11 @@
 
   // eclipse test server
   var deets = {
-    host: 'mrm28q29kuoha.messaging.solace.cloud',
+    host: '<host>.messaging.solace.cloud',
     port: 8443,
     ssl: true,
     username: 'solace-cloud-client',
-    password: 'fv1e2ijrun4r7ol5irkk9i6s4g',
+    password: 'password',
   }
   
   var topicName = 'SmartTown/Analytics/AggregateAlert/created/v1/+/+/+';

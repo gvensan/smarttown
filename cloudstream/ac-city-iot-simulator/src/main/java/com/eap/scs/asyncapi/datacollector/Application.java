@@ -51,7 +51,7 @@ public class Application {
 	        String topic = "SmartTown/Operations/temperatureReading/created/v1/" + city + "/" + latitude + "/" + longitude;	        			
 			TemperatureReading data = new TemperatureReading(cpuLoad, city, latitude, longitude, cpuTemp);
 			
-			logger.info("\n" + data.toString());	
+			logger.info("\n" + data.toString() + "\n Sent on: " + topic);	
 
 			// Set the target destination as the constructed topic name
 	        return MessageBuilder.withPayload(data)
